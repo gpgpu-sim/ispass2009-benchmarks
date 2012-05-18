@@ -1,2 +1,1 @@
-make
-./gpgpu_ptx_sim__neuralnet 28
+../../../bin/release/NN 28

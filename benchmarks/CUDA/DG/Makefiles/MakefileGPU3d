@@ -7,9 +7,9 @@ CUDADIR=/usr/local/cuda/
 
 # set options for this machine
 # specify which compilers to use for c, fortran and linking
-CC	= mpicc
-LD	= mpicc
-NVCC	= nvcc
+CC	= $(OPENMPI_BINDIR)mpicc
+LD	= $(OPENMPI_BINDIR)mpicc
+NVCC	= $(CUDA_INSTALL_PATH)/bin/nvcc
 
 # compiler flags to be used (set to compile with debugging on)
 CFLAGS = -Dp_N=$(N) -DNDG3d -DCUDA -I/opt/local/include -I/usr/include/malloc -I$(HDRDIR) -O3 -I$(CUDADIR)/include

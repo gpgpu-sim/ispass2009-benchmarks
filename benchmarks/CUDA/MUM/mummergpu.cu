@@ -89,27 +89,27 @@ struct Timer_t
   struct timeval end_m;
 };
 
-void createTimer(unsigned int * timer)
+void createTimer(struct Timer_t ** timer)
 {
-  unsigned int * ptr = (unsigned int *) malloc(sizeof(struct Timer_t));
+  struct Timer_t * ptr = (struct Timer_t *) malloc(sizeof(struct Timer_t));
   memset(ptr, 0, sizeof(struct Timer_t));
 
-  *timer = (unsigned int)(unsigned long long) ptr;
+  *timer = ptr;
 }
 
-void startTimer(unsigned int ptr)
+void startTimer(struct Timer_t * ptr)
 {
-  gettimeofday(&(((struct Timer_t *)ptr)->start_m), NULL);
+  gettimeofday(&(ptr->start_m), NULL);
 }
 
-void stopTimer(unsigned int ptr)
+void stopTimer(struct Timer_t * ptr)
 {
-  gettimeofday(&(((struct Timer_t *)ptr)->end_m), NULL);
+  gettimeofday(&(ptr->end_m), NULL);
 }
 
-float getTimerValue(unsigned int ptr)
+float getTimerValue(struct Timer_t * ptr)
 {
-  Timer_t * timer = (Timer_t*) ptr;
+  Timer_t * timer = ptr;
 
   if (timer == NULL)
   {
@@ -123,9 +123,9 @@ float getTimerValue(unsigned int ptr)
                 + (0.001 *  (timer->end_m.tv_usec - timer->start_m.tv_usec)));
 }
 
-void deleteTimer(unsigned int ptr)
+void deleteTimer(struct Timer_t * ptr)
 {
-  free((Timer_t *)ptr);
+  free(ptr);
 }
 
 extern "C"
@@ -326,7 +326,7 @@ void loadReferenceTexture(MatchContext* ctx)
      
    if (!ctx->on_cpu)
    {
-      unsigned int toboardtimer = 0;
+      struct Timer_t * toboardtimer = 0;
       createTimer(&toboardtimer);
       startTimer(toboardtimer);
 
@@ -385,7 +385,7 @@ void loadReference(MatchContext* ctx)
   
    if (!ctx->on_cpu)
    {
-      unsigned int toboardtimer = 0;
+      struct Timer_t * toboardtimer = 0;
       createTimer(&toboardtimer);
       startTimer(toboardtimer);
 
@@ -472,7 +472,7 @@ void unloadReference(MatchContext* ctx)
 
 void loadQueries(MatchContext* ctx)
 {
-   unsigned int toboardtimer = 0;
+   struct Timer_t * toboardtimer = 0;
    createTimer(&toboardtimer);
    startTimer(toboardtimer);
 
@@ -564,7 +564,7 @@ void loadResultBuffer(MatchContext* ctx)
    
    if (!ctx->on_cpu)
    {
-      unsigned int toboardtimer = 0;
+      struct Timer_t * toboardtimer = 0;
       createTimer(&toboardtimer);
       startTimer(toboardtimer);
 
@@ -609,7 +609,7 @@ void transferResultsFromDevice(MatchContext* ctx)
 {
    if (!ctx->on_cpu)
    {
-      unsigned int fromboardtimer = 0;
+      struct Timer_t * fromboardtimer = 0;
       createTimer(&fromboardtimer);
       startTimer(fromboardtimer);
 	       
@@ -852,7 +852,7 @@ int getQueryBlock(MatchContext* ctx, size_t device_mem_avail)
    size_t queryLen;
    char** names;
 
-   unsigned int queryreadtimer = 0;
+   struct Timer_t * queryreadtimer = 0;
    createTimer(&queryreadtimer);
    startTimer(queryreadtimer);
 
@@ -944,7 +944,7 @@ int matchSubset(MatchContext* ctx,
 	  loadReference(ctx);
 	  loadResultBuffer(ctx);
 	  
-      unsigned int ktimer = 0;
+      struct Timer_t * ktimer = 0;
       createTimer(&ktimer);
 	  
 	  unsigned int numQueries = ctx->queries->count;
@@ -1050,7 +1050,7 @@ int matchSubset(MatchContext* ctx,
 	  // now compute the reverse matches.
 	  if (ctx->forwardreverse)
 	  {
-		 unsigned int rctimer = 0;
+		 struct Timer_t * rctimer = 0;
 		 createTimer(&rctimer);
 		 startTimer(rctimer);
 
@@ -1102,7 +1102,7 @@ int matchSubset(MatchContext* ctx,
    }
 
 
-   unsigned int otimer = 0;
+   struct Timer_t * otimer = 0;
    createTimer(&otimer);
    startTimer(otimer);
 
@@ -1142,11 +1142,11 @@ int matchQueries(MatchContext* ctx)
    ctx->statistics.t_construction = 0.0;
    ctx->statistics.bp_avg_query_length = 0.0;
 
-   unsigned int ttimer = 0;
+   struct Timer_t * ttimer = 0;
    createTimer(&ttimer);
    startTimer(ttimer);
 
-   unsigned int ctimer = 0;
+   struct Timer_t * ctimer = 0;
    createTimer(&ctimer);
    startTimer(ctimer);
 

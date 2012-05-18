@@ -1,0 +1,51 @@
+
+BINDIR:=$(shell pwd)/../bin/
+BINSUBDIR=release
+SETENV=export BINDIR=$(BINDIR); \
+	   export ROOTDIR=$(NVIDIA_COMPUTE_SDK_LOCATION)/C/src/; \
+	   export BINSUBDIR=$(BINSUBDIR); \
+	   export BOOST_LIB=/usr/lib64; \
+	   export BOOST_ROOT=/usr/include; \
+	   export BOOST_VER=""; \
+	   export OPENMPI_BINDIR=/usr/lib64/mpi/gcc/openmpi/bin/; 
+noinline?=0
+
+default: common 
+	$(SETENV) make noinline=$(noinline) -C CUDA/AES
+	$(SETENV) make noinline=$(noinline) -C CUDA/BFS
+	cd ./CUDA/CP/; export PARBOIL_ROOT=`pwd`; cd common/src; make; cd -; ./parboil compile cp cuda_short; cp benchmarks/cp/build/cuda_short/cp $(BINDIR)/$(BINSUBDIR)/CP 
+	$(SETENV) make noinline=$(noinline) -C CUDA/DG/3rdParty/ParMetis-3.1
+	$(SETENV) make noinline=$(noinline) -C CUDA/DG
+	$(SETENV) make noinline=$(noinline) -C CUDA/LIB
+	$(SETENV) make noinline=$(noinline) -C CUDA/LPS
+	$(SETENV) make noinline=$(noinline) -C CUDA/MUM
+	$(SETENV) make noinline=$(noinline) -C CUDA/NN
+	$(SETENV) make noinline=$(noinline) -C CUDA/NQU
+	$(SETENV) make noinline=$(noinline) -C CUDA/RAY
+	$(SETENV) make noinline=$(noinline) -C CUDA/STO
+	$(SETENV) make noinline=$(noinline) -C CUDA/WP
+
+common:
+	rm -f ../common; ln -s $(NVIDIA_COMPUTE_SDK_LOCATION)/C/common ../common;
+	@ if [ ! -e ../common/common.mk ]; then echo "NVIDIA_COMPUTE_SDK_LOCATION environment variable not set properly."; exit 1; fi 
+
+clean: common
+	$(SETENV) make clean -C CUDA/AES
+	$(SETENV) make clean -C CUDA/BFS
+	cd ./CUDA/CP/; ./parboil clean cp cuda_short	 
+	$(SETENV) make clean -C ./CUDA/DG/3rdParty/ParMetis-3.1
+	$(SETENV) make clean -C ./CUDA/DG
+	$(SETENV) make clean -C ./CUDA/LIB
+	$(SETENV) make clean -C ./CUDA/LPS
+	$(SETENV) make clean -C ./CUDA/MUM
+	$(SETENV) make clean -C ./CUDA/NN
+	$(SETENV) make clean -C ./CUDA/NQU
+	$(SETENV) make clean -C ./CUDA/RAY
+	$(SETENV) make clean -C ./CUDA/STO
+	$(SETENV) make clean -C ./CUDA/WP
+
+clean-visualizer:
+	rm `find -name "gpgpusim_visualizer__*.log.gz"`
+
+all: default
+cleanall: clean

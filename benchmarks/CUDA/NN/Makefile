@@ -34,7 +34,7 @@
 ###############################################################################
 
 # Add source files here
-EXECUTABLE	:= neuralnet
+EXECUTABLE	:= NN
 # Cuda source files (compiled with cudacc)
 CUFILES		:= NN.cu 
 # C/C++ source files (compiled with gcc / c++)

@@ -2,6 +2,7 @@
 //#include "CUtilities.h"
 #include <iostream>
 #include <cstring>
+#include <stdio.h>
 using namespace std;
 
 static const size_t POOLBLOCKSIZE = 10*1024*1024;

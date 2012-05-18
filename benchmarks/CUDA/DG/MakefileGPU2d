@@ -48,9 +48,9 @@ N ?= 6
 CFLAGS = -Dp_N=$(N) -DNDG2d -DCUDA -I/opt/local/include -I/usr/include/malloc -I$(HDRDIR) -O3 
 CUFLAGS = $(CFLAGS)
 
-NEWCC = mpicc
-LD = mpicc
-NEWCPP = mpicxx
+NEWCC = $(OPENMPI_BINDIR)mpicc
+LD = $(OPENMPI_BINDIR)mpicc
+NEWCPP = $(OPENMPI_BINDIR)mpicxx
 ###############################################################################
 # Rules and targets
 

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-
+#include <stdint.h>
 #include <fstream>
 #define ulong4 uint32_t
 #include "mummergpu.h"

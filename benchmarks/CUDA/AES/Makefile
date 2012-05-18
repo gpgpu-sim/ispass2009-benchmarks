@@ -34,21 +34,20 @@
 ###############################################################################
 
 # Add source files here
-EXECUTABLE	:= aescuda	
+EXECUTABLE	:= AES	
 # Cuda source files (compiled with cudacc)
 CUFILES		:= aesHost.cu 
 # C/C++ source files (compiled with gcc / c++)
 CCFILES		:= aescuda.cpp  aesCudaUtils.cpp
-LIB		:= -lboost_filesystem
+LINKFLAGS	:= -L$(BOOST_LIB) -lboost_filesystem$(BOOST_VER)
 
 HDRDIR  	:= 
 NEWLIBDIR  	:= 
-INCFLAGEXTRA	:= -I$(BOOST_ROOT) 
+INCLUDES	:= -I$(BOOST_ROOT) 
 CFLAGS 	:=   -O3 
 CUFLAGS	:= $(CFLAGS)
 
 ###############################################################################
 # Rules and targets
 
-GPGPUSIM_ROOT := ../../..
 include ../../../common/common.mk

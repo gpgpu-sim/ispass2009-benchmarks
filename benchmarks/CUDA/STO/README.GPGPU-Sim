@@ -1,2 +1,1 @@
-make
-./gpgpu_ptx_sim__storegpu
+../../../bin/release/STO

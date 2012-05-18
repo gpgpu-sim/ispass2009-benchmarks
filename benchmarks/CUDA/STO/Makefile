@@ -34,19 +34,20 @@
 ################################################################################
 
 # Add source files here
-EXECUTABLE	:= storegpu 
+EXECUTABLE	:= STO
+
 # CUDA source files (compiled with cudacc)
 CUFILES		:= main.cu storeGPU.cu
+
 # CUDA dependency files
-CU_DEPS		:= \
-md5_kernel.cu sha1_kernel.cu 
+CU_DEPS		:= md5_kernel.cu sha1_kernel.cu
+
 # C/C++ source files (compiled with gcc / c++)
-CCFILES		:= \
-	storeCPU.c md5_cpu.c sha1_cpu.c  
+CCFILES		:= storeCPU.cpp md5_cpu.cpp sha1_cpu.cpp
+
 #CUDACCFLAGS     := -po maxrregcount=16
 
 ################################################################################
 # Rules and targets
 
-GPGPUSIM_ROOT := ../../..
 include ../../../common/common.mk

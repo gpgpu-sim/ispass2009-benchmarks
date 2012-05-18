@@ -34,7 +34,7 @@
 ################################################################################
 
 # Add source files here
-EXECUTABLE	:= ray_2
+EXECUTABLE	:= RAY
 # Cuda source files (compiled with cudacc)
 CUFILES		+= rayTracing.cu
 CCFILES         := EasyBMP.cpp makebmp.cpp

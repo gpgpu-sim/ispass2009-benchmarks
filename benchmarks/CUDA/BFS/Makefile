@@ -34,13 +34,11 @@
 ################################################################################
 
 # Add source files here
-EXECUTABLE	:= bfs
+EXECUTABLE	:= BFS
 # Cuda source files (compiled with cudacc)
 CUFILES		:= bfs.cu
 # C/C++ source files (compiled with gcc / c++)
 CCFILES		:= 
-
-GPGPUSIM_ROOT  := ../../..
 
 ################################################################################
 # Rules and targets

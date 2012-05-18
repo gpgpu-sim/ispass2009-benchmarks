@@ -7,7 +7,7 @@
 #include <map>
 #include <vector>
 #include <queue>
-
+#include <stdint.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <sys/types.h>

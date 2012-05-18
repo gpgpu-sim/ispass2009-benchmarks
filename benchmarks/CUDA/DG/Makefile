@@ -34,29 +34,35 @@
 ###############################################################################
 
 # Add source files here
-EXECUTABLE	:= gpuDG3d 
+EXECUTABLE	:= DG 
 # Cuda source files (compiled with cudacc)
 CUFILES		:= src/MaxwellsKernel3d.cu 
 # C/C++ source files (compiled with gcc / c++)
 CFILES		:= src/Mesh3d.c src/Utils.c src/LoadBalance3d.c src/FacePair3d.c src/ParallelPairs.c src/BuildMaps3d.c src/StartUp3d.c src/MaxwellsRun3d.c \
 		src/MaxwellsMPI3d.c src/MaxwellsDriver3d.c
 GPGPUSIM_ROOT   := ../../..
-LIB             := -lparmetis -lmetis -lm -lmpi
+PWD := $(shell pwd)
+SRCDIR  = ./src/
 HDRDIR  = ./include
-NEWLIBDIR  := -L./3rdParty/ParMetis-3.1/  -L/usr/lib64/mpi/gcc/openmpi/lib64/
-N ?= 6
-HOSTNAME=$(shell hostname | awk '/aamodt/ {print 1;}')
-ifeq ($(HOSTNAME),1)
-CFLAGS = -Dp_N=$(N) -DNDG3d -DCUDA -I/opt/local/include -I/usr/include/malloc -I$(HDRDIR) -O3 -I/opt/mpich/include
-else
-CFLAGS = -Dp_N=$(N) -DNDG3d -DCUDA -I/opt/local/include -I/usr/include/malloc -I$(HDRDIR) -O3 
-endif
-CUFLAGS = $(CFLAGS)
 
-NEWCC = mpicc
-LD = mpicc
-NEWCPP = mpicxx
+MPICMPOPTS := $(shell $(OPENMPI_BINDIR)mpicxx --showme:compile) # extract the required options to compile with mpich 
+MPILNKOPTS := $(shell $(OPENMPI_BINDIR)mpicxx --showme:link) # extract the required options to link with mpich 
+
+N ?= 6
+HOSTNAME=$(shell hostname | awk '/aamodt/ {print 1;} /arch/ {print 1;}')
+ifeq ($(HOSTNAME),1)
+INCLUDES = -Dp_N=$(N) -DNDG3d -DCUDA -I/opt/local/include -I/usr/include/malloc -I$(HDRDIR) -I/opt/mpich/include
+else
+INCLUDES = -Dp_N=$(N) -DNDG3d -DCUDA -I/opt/local/include -I/usr/include/malloc -I$(HDRDIR)  
+endif
+
+NEWCC = $(OPENMPI_BINDIR)mpicc
+NEWLD = $(OPENMPI_BINDIR)mpicxx
+NEWCPP = $(OPENMPI_BINDIR)mpicxx
 ###############################################################################
 # Rules and targets
 
 include ../../../common/common.mk
+
+LINKLINE += $(MPILNKOPTS) -L$(PWD)/3rdParty/ParMetis-3.1/ -lparmetis -lmetis -lm 
+
