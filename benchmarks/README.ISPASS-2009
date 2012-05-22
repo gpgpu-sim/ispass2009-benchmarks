@@ -45,7 +45,7 @@ build/run them by doing the following:
    in the benchmark directory. For example,
 
 	cd CUDA/AES
-	`cat README.GPGPU-Sim`
+	sh README.GPGPU-Sim
 
 9. When debugging the simulator, you should build GPGPU-Sim in debug mode: 
 
@@ -57,7 +57,7 @@ build/run them by doing the following:
    Example of running the simulator in gdb (starting from this directory):
 
 	cd CUDA/AES
-	gdb --args `cat README.GPGPU-Sim`
+	gdb --args `cat README.GPGPU-Sim` # note: different steps required for WP
 	
 
 ###############################################################################
