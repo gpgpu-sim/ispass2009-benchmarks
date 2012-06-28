@@ -1,10 +1,10 @@
-The directories AES, BFS, CP, LPS, LIB, MUM, NN, NQU, RAY, STO, and WP (see the
-CUDA directory) contain benchmarks used in the ISPASS 2009 paper on GPGPU-Sim.
-Their original sources are listed below.  
+The directories AES, BFS, CP, LPS, LIB, MUM, NN, NQU, RAY, STO, and WP (see
+the CUDA directory) contain benchmarks used in the ISPASS 2009 paper on
+GPGPU-Sim.  Their original sources are listed below.  
 
 The instructions below describe how to build and run the benchmarks assuming
-you are using GPGPU-Sim v3.x.  This series of instructions is essentially
-the procedure we follow when using GPGPU-Sim v3.x in our research at UBC.
+you are using GPGPU-Sim v3.x.  This series of instructions is essentially the
+procedure we follow when using GPGPU-Sim v3.x in our research at UBC.
 
 Assuming all dependencies required by the benchmarks are satisifed, you can
 build/run them by doing the following:
@@ -12,16 +12,24 @@ build/run them by doing the following:
 1. Install/build the NVIDIA CUDA SDK benchmarks (required since some of the
    ISPASS 2009 benchmarks use a library you need to build in this step).
 
-2. Open Makefile.ispass-2009 in your favorite text editor and set the variables
-   At the top of the file to suit your environment. 
+2. Open Makefile.ispass-2009 in your favorite text editor and set the
+   variables At the top of the file to suit your environment. 
 
 3. Define the following environment variables:
 
-	NVIDIA_COMPUTE_SDK_LOCATION
 	CUDA_INSTALL_PATH
+	NVIDIA_COMPUTE_SDK_LOCATION
 
-4. run "make -f Makefile.ispass-2009" in this directory. You should NOT need to
-   copy or move any files for this to work.
+   The first, CUDA_INSTALL_PATH, should point to the directory you installed
+   the NVIDIA CUDA Toolkit (e.g., /usr/local/cuda).
+
+   The second, NVIDIA_COMPUTE_SDK_LOCATION, should point to the directory you
+   installed the NVIDIA GPU Computing SDK (e.g., ~/NVIDIA_GPU_Computing_SDK)
+
+   You must also ensure your PATH includes $CUDA_INSTALL_PATH/bin.	
+
+4. run "make -f Makefile.ispass-2009" in this directory. You should NOT need
+   to copy or move any files for this to work.
 
 5. Verify binaries were generated for the benchmarks in ../bin/release/
    (relative to the directory this file located in)
@@ -31,18 +39,20 @@ build/run them by doing the following:
    not already done so, build GPGPU-Sim now.
 
 7. Place a link to the configuration files (gpgpusim.config and the
-   interconnect configuration file) in the simulation run directory.  You can do
-   this using the script "setup_config.sh" in this directory, which creates
-   symbolic links. For example:
+   interconnect configuration file) in the simulation run directory.  You can 
+   do this using the script "setup_config.sh" you will find in this directory, 
+   which creates symbolic links. For example type:
 
         ./setup_config.sh Fermi
 
-   To change the configuration, you need to first run
+   Aside: If later you want to change the configuration, you need to first run
 
         ./setup_config.sh --cleanup
 
-8. Run one of the applications by typing the command line in the README.GPGPU-Sim 
-   in the benchmark directory. For example,
+   then run ./setup_config.sh again with the configuration you want.
+
+8. Run one of the applications by typing the command line in the
+   README.GPGPU-Sim in the benchmark directory. For example,
 
 	cd CUDA/AES
 	sh README.GPGPU-Sim
@@ -57,7 +67,7 @@ build/run them by doing the following:
    Example of running the simulator in gdb (starting from this directory):
 
 	cd CUDA/AES
-	gdb --args `cat README.GPGPU-Sim` # note: different steps required for WP
+	gdb --args `cat README.GPGPU-Sim` # different steps required for WP
 	
 
 ###############################################################################

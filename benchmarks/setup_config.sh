@@ -1,18 +1,24 @@
 #!/bin/sh
 
+if [ ! -n "$GPGPUSIM_ROOT" ]; then
+	echo "ERROR ** GPGPUSIM_ROOT not set. Run setup_environment first.\n";
+fi
+
+BENCHMARKS=`ls -1 CUDA | sed 's/\(.\)/\.\/CUDA\/\1/'`
+
 GPGPUSIM_CONFIG=$1
 if [ "x$GPGPUSIM_CONFIG" = "x" ]; then 
+    echo "";
     echo "Usage: $0 <GPGPU-Sim Config Name | --cleanup>"
     echo "where <GPGPU-Sim Config Name> is one of:"
     ls -1 $GPGPUSIM_ROOT/configs
+    echo "";
     exit 0
 fi
 
 if [ "x$GPGPUSIM_ROOT" = "x" ]; then 
     GPGPUSIM_ROOT="$PWD/.."
 fi
-
-BENCHMARKS=`ls -1 CUDA | sed 's/\(.\)/\.\/CUDA\/\1/'`
 
 if [ $1 = "--cleanup" ]; then
     echo "Removing existing configs in the following directories:"
