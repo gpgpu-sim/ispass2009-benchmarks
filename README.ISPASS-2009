@@ -1,0 +1,137 @@
+The directories AES, BFS, CP, LPS, LIB, MUM, NN, NQU, RAY, STO, and WP contain
+benchmarks used in the ISPASS 2009 paper on GPGPU-Sim.  Their original sources
+are listed below.
+
+The instructions below describe how to build and run the benchmarks assuming
+you are using GPGPU-Sim v3.x.  This series of instructions is essentially the
+procedure we follow when using GPGPU-Sim v3.x in our research at UBC.
+
+Assuming all dependencies required by the benchmarks are satisifed, you can
+build/run them by doing the following:
+   
+1. Install/build the NVIDIA CUDA SDK benchmarks (required since some of the
+   ISPASS 2009 benchmarks use a library you need to build in this step).
+
+2. Open Makefile.ispass-2009 in your favorite text editor and set the
+   variables At the top of the file to suit your environment. 
+
+3. Define the following environment variables:
+
+	CUDA_INSTALL_PATH
+	NVIDIA_COMPUTE_SDK_LOCATION
+
+   The first, CUDA_INSTALL_PATH, should point to the directory you installed
+   the NVIDIA CUDA Toolkit (e.g., /usr/local/cuda).
+
+   The second, NVIDIA_COMPUTE_SDK_LOCATION, should point to the directory you
+   installed the NVIDIA GPU Computing SDK (e.g., ~/NVIDIA_GPU_Computing_SDK)
+
+   You must also ensure your PATH includes $CUDA_INSTALL_PATH/bin.	
+
+4. run "make -f Makefile.ispass-2009" in this directory. You should NOT need
+   to copy or move any files for this to work.
+
+5. Verify binaries were generated for the benchmarks in ../bin/release/
+   (relative to the directory this file located in)
+
+6. Type "source setup_environment" in the v3.x directory.  This modifies your
+   LD_LIBRARY_PATH to use GPGPU-Sim for CUDA/OpenCL applications. If you have 
+   not already done so, build GPGPU-Sim now.
+
+7. Place a link to the configuration files (gpgpusim.config and the
+   interconnect configuration file) in the simulation run directory.  You can 
+   do this using the script "setup_config.sh" you will find in this directory, 
+   which creates symbolic links. For example type:
+
+	./setup_config.sh GTX480
+
+   Aside: If later you want to change the configuration, you need to first run
+
+        ./setup_config.sh --cleanup
+
+   then run ./setup_config.sh again with the configuration you want.
+
+8. Run one of the applications by typing the command line in the
+   README.GPGPU-Sim in the benchmark directory. For example,
+
+	cd AES
+	sh README.GPGPU-Sim
+
+9. When debugging the simulator, you should build GPGPU-Sim in debug mode: 
+
+	cd $GPGPUSIM_ROOT
+	source setup_environment debug
+	make clean
+	make
+
+   Example of running the simulator in gdb (starting from this directory):
+
+	cd AES
+	gdb --args `cat README.GPGPU-Sim` # different steps required for WP
+	
+
+###############################################################################
+#                             References                                      #
+###############################################################################
+
+AES
+
+S. A. Manavski. CUDA compatible GPU as an efﬁcient hardware
+accelerator for AES cryptography. In ICSPC 2007: Proc. of IEEE Int’l
+Conf. on Signal Processing and Communication, pages 65–68, 2007.
+
+BFS:
+
+P. Harish and P. J. Narayanan. Accelerating Large Graph Algorithms
+on the GPU Using CUDA. In HiPC, pages 197–208, 2007.
+
+CP:
+
+http://www.crhc.uiuc.edu/IMPACT/parboil.php. 
+
+DG:
+T. C. Warburton. Mini Discontinuous Galerkin Solvers. 
+http://www.caam.rice.edu/˜timwar/RMMC/MIDG.html.
+
+LPS:
+
+M. Giles. Jacobi iteration for a Laplace discretisation on a 3D structured
+grid. http://people.maths.ox.ac.uk/˜gilesm/hpc/NVIDIA/laplace3d.pdf
+
+LIB:
+
+M. Giles and S. Xiaoke. Notes on using the NVIDIA 8800 GTX graphics
+card. http://people.maths.ox.ac.uk/˜gilesm/hpc/
+
+MUM:
+
+M. Schatz, C. Trapnell, A. Delcher, and A. Varshney. High-throughput
+sequence alignment using Graphics Processing Units. BMC Bioinformatics,
+ 8(1):474, 2007.
+
+NN:
+
+Billconan and Kavinguy. A Neural Network on GPU.
+http://www.codeproject.com/KB/graphics/GPUNN.aspx. 
+
+NQU:
+
+Pcchen. N-Queens Solver. 
+http://forums.nvidia.com/index.php?showtopic=76893
+
+RAY:
+
+Maxime. Ray tracing. http://www.nvidia.com/cuda.
+
+STO:
+
+S. Al-Kiswany, A. Gharaibeh, E. Santos-Neto, G. Yuan, and M. Ripeanu.
+StoreGPU: exploiting graphics processing units to accelerate distributed
+storage systems. In Proc. 17th Int’l Symp. on High Performance
+Distributed Computing, pages 165–174, 2008. 
+
+WP:
+
+J. Michalakes and M. Vachharajani. GPU acceleration of numerical 
+weather prediction. IPDPS 2008: IEEE Int’l Symp. on Parallel and
+Distributed Processing, pages 1–7, April 2008.

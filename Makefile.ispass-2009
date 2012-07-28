@@ -1,0 +1,82 @@
+# Please see README.ISPASS-2009 for instructions
+
+BINDIR:=$(shell pwd)/bin/
+BINSUBDIR=release
+SETENV=export BINDIR=$(BINDIR); \
+	   export ROOTDIR=$(NVIDIA_COMPUTE_SDK_LOCATION)/C/src/; \
+	   export BINSUBDIR=$(BINSUBDIR); \
+	   export BOOST_LIB=/usr/lib64; \
+	   export BOOST_ROOT=/usr/include; \
+	   export BOOST_VER=""; \
+	   export OPENMPI_BINDIR=/usr/lib64/mpi/gcc/openmpi/bin/; 
+noinline?=0
+
+.PHONY: check_environment
+default: check_environment common 
+	$(SETENV) make noinline=$(noinline) -C AES
+	$(SETENV) make noinline=$(noinline) -C BFS
+	cd CP; export PARBOIL_ROOT=`pwd`; cd common/src; make; cd -; ./parboil compile cp cuda_short; cp benchmarks/cp/build/cuda_short/cp $(BINDIR)/$(BINSUBDIR)/CP 
+	$(SETENV) make noinline=$(noinline) -C DG/3rdParty/ParMetis-3.1
+	$(SETENV) make noinline=$(noinline) -C DG
+	$(SETENV) make noinline=$(noinline) -C LIB
+	$(SETENV) make noinline=$(noinline) -C LPS
+	$(SETENV) make noinline=$(noinline) -C MUM
+	$(SETENV) make noinline=$(noinline) -C NN
+	$(SETENV) make noinline=$(noinline) -C NQU
+	$(SETENV) make noinline=$(noinline) -C RAY
+	$(SETENV) make noinline=$(noinline) -C STO
+	$(SETENV) make noinline=$(noinline) -C WP
+
+check_environment:
+	 @if [ ! -n "$(CUDA_INSTALL_PATH)" ]; then \
+		echo "ERROR *** CUDA_INSTALL_PATH not set; please see README.ISPASS-2009"; \
+		exit 201; \
+	 elif [ ! -d "$(CUDA_INSTALL_PATH)" ]; then \
+	 	echo "ERROR *** CUDA_INSTALL_PATH=$(CUDA_INSTALL_PATH) invalid (directory does not exist)."; \
+		exit 202; \
+	 elif [ ! -n "$(NVIDIA_COMPUTE_SDK_LOCATION)" ]; then \
+		echo "ERROR *** NVIDIA_COMPUTE_SDK_LOCATION not set; please see README.ISPASS-2009"; \
+		exit 203; \
+	 elif [ ! -d "$(NVIDIA_COMPUTE_SDK_LOCATION)" ]; then \
+	 	echo "ERROR *** NVIDIA_COMPUTE_SDK_LOCATION=$(NVIDIA_COMPUTE_SDK_LOCATION) invalid (directory does not exist)."; \
+		exit 204; \
+	 elif [ ! -f "$(NVIDIA_COMPUTE_SDK_LOCATION)/C/lib/libcutil_x86_64.a" -a  ! -f "$(NVIDIA_COMPUTE_SDK_LOCATION)/C/lib/libcutil.a" ]; then \
+	 	echo "ERROR *** could not find $(NVIDIA_COMPUTE_SDK_LOCATION)/C/lib/libcutil_x86_64.a (or libcutil.a)"; \
+	 	echo "          Build the NVIDIA GPU Computing SDK; please see README.ISPASS-2009"; \
+		exit 205; \
+	 else \
+		NVCC_PATH=`which nvcc`; \
+		if [ $$? = 1 ]; then \
+			echo ""; \
+			echo "ERROR ** nvcc (from CUDA Toolkit) was not found in PATH but required to build the ISPASS 2009 benchmarks."; \
+			echo "         Try adding $(CUDA_INSTALL_PATH)/bin/ to your PATH environment variable."; \
+			echo "         Please also be sure to read README.ISPASS-2009 if you have not done so."; \
+			echo ""; \
+			exit 206; \
+		else true; \
+		fi \
+	 fi
+
+common:
+	rm -f ../common; ln -s $(NVIDIA_COMPUTE_SDK_LOCATION)/C/common ../common;
+
+clean: check_environment common
+	$(SETENV) make clean -C AES
+	$(SETENV) make clean -C BFS
+	cd CP; ./parboil clean cp cuda_short	 
+	$(SETENV) make clean -C DG/3rdParty/ParMetis-3.1
+	$(SETENV) make clean -C DG
+	$(SETENV) make clean -C LIB
+	$(SETENV) make clean -C LPS
+	$(SETENV) make clean -C MUM
+	$(SETENV) make clean -C NN
+	$(SETENV) make clean -C NQU
+	$(SETENV) make clean -C RAY
+	$(SETENV) make clean -C STO
+	$(SETENV) make clean -C WP
+
+clean-visualizer:
+	rm `find -name "gpgpusim_visualizer__*.log.gz"`
+
+all: default
+cleanall: clean
