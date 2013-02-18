@@ -9,11 +9,13 @@ procedure we follow when using GPGPU-Sim v3.x in our research at UBC.
 Assuming all dependencies required by the benchmarks are satisifed, you can
 build/run them by doing the following:
    
-1. Install/build the NVIDIA CUDA SDK benchmarks (required since some of the
-   ISPASS 2009 benchmarks use a library you need to build in this step).
+1. Install the NVIDIA CUDA Toolkit and then install/build the NVIDIA CUDA SDK
+   benchmarks. Note the CUDA Toolkit needs to be installed before you can build 
+   the CUDA SDK.  Building the CUDA SDK is required since some of the ISPASS 2009
+   benchmarks use a library created when building the CUDA SDK.
 
 2. Open Makefile.ispass-2009 in your favorite text editor and set the
-   variables At the top of the file to suit your environment. 
+   variables at the top of the file to suit your environment. 
 
 3. Define the following environment variables:
 
